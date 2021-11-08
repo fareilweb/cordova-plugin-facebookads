@@ -3,6 +3,7 @@
     "name": "Luca Cilfone",
     "email": "info@fareiweb.com"
   },
+  "private": true,
   "bugs": {
     "url": "https://github.com/fareilweb/cordova-plugin-facebookads/issues"
   },
