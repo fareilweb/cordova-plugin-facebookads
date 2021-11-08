@@ -25,13 +25,11 @@ import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 import com.facebook.ads.*;
+import com.facebook.ads.NativeAd.Image;
+import com.facebook.ads.NativeAd.Rating;
+import com.rjfun.cordova.ad.GenericAdPlugin;
 
-import com.facebook.ads.NativeAdBase.Image; // Replaced for FBSDK 6, old is: import com.facebook.ads.NativeAd.Image;
-import com.facebook.ads.NativeAdBase.Rating; // Replaced for FBSDK 6: old is: import com.facebook.ads.NativeAd.Rating;
-
-// import com.rjfun.cordova.ad.GenericAdPlugin;
-
-public class FacebookAdPlugin /*extends GenericAdPlugin*/ {
+public class FacebookAdPlugin extends GenericAdPlugin {
     private static final String LOGTAG = "FacebookAds";
 
     private static final String TEST_BANNER_ID = "726719434140206_777151452430337";
@@ -61,7 +59,7 @@ public class FacebookAdPlugin /*extends GenericAdPlugin*/ {
 
     @Override
     protected void pluginInitialize() {
-    	// super.pluginInitialize();
+    	super.pluginInitialize();
 
     	this.adSize = __AdSizeFromString("SMART_BANNER");
 	}
@@ -211,10 +209,7 @@ public class FacebookAdPlugin /*extends GenericAdPlugin*/ {
 				unit.view.setOnTouchListener(t);
 
             	unit.ad = new NativeAd(getActivity(), adId);
-
-				/*
-				// Following code was replaced because was deprecated and now ndont work
-            	unit.ad.setAdListener(new AdListener() {
+            	unit.ad.setAdListener(new AdListener(){
             	    @Override
             	    public void onError(Ad ad, AdError error) {
                     	fireAdErrorEvent(EVENT_AD_FAILLOAD, error.getErrorCode(), error.getErrorMessage(), ADTYPE_NATIVE);
@@ -235,49 +230,10 @@ public class FacebookAdPlugin /*extends GenericAdPlugin*/ {
 						// Ad impression logged callback
 				    }
             	});
-				*/
-
-				// Replace deprecated for FBSDK 6, see: https://stackoverflow.com/questions/59560897/what-should-replace-deprecated-facebook-adview-setadlistener-to-get-callbacks
-				NativeAdListener adListener = new NativeAdListener() {
-					@Override
-					public void onMediaDownloaded(Ad ad) {
-						// Media download logged callback
-					}
-
-					@Override
-					public void onError(Ad ad, AdError adError) {
-						fireAdErrorEvent(EVENT_AD_FAILLOAD, adError.getErrorCode(), adError.getErrorMessage(), ADTYPE_NATIVE);
-					}
-
-					@Override
-					public void onAdLoaded(Ad ad) {
-						fireNativeAdLoadEvent(ad);
-					}
-
-					@Override
-					public void onAdClicked(Ad ad) {
-						fireAdEvent(EVENT_AD_LEAVEAPP, ADTYPE_NATIVE);
-					}
-
-					@Override
-					public void onLoggingImpression(Ad ad) {
-						// Ad impression logged callback
-					}
-				};
-
-				/*
-				AdView.AdViewLoadConfig loadAdConfig = (AdView.AdViewLoadConfig) unit.ad.buildLoadAdConfig()
-						.withAdListener(adListener)
-						.build();
-				*/
-
-				NativeAdBase.NativeLoadAdConfig  loadAdConfig = unit.ad.buildLoadAdConfig()
-						.withAdListener(adListener)
-						.build();
 
             	nativeAds.put(adId, unit);
 
-            	unit.ad.loadAd(loadAdConfig);
+            	unit.ad.loadAd();
             }
 	    });
     }
@@ -290,17 +246,12 @@ public class FacebookAdPlugin /*extends GenericAdPlugin*/ {
         	if((unit != null) && (unit.ad == ad)){
 				String jsonData = "{}";
 				try {
-					//Replaced for SDK 6: String titleForAd = unit.ad.getAdTitle();
-					String titleForAd = unit.ad.getAdHeadline();
-
+					String titleForAd = unit.ad.getAdTitle();
 					Image coverImage = unit.ad.getAdCoverImage();
 					Image iconForAd = unit.ad.getAdIcon();
 					String socialContextForAd = unit.ad.getAdSocialContext();
 					String titleForAdButton = unit.ad.getAdCallToAction();
-
-					//Replaced for SDK 6: String textForAdBody = unit.ad.getAdBody();
-					String textForAdBody = unit.ad.getAdBodyText();
-
+					String textForAdBody = unit.ad.getAdBody();
 					Rating appRatingForAd = unit.ad.getAdStarRating();
 
 					JSONObject json = new JSONObject();
@@ -340,12 +291,9 @@ public class FacebookAdPlugin /*extends GenericAdPlugin*/ {
 					jsonData = json.toString();
 				} catch(Exception e) {
 				}
-
                 if (unit.ad != null) {
-                  	unit.ad.unregisterView();
-
-					//Replaced for SDK 6: unit.ad.registerViewForInteraction(unit.tracking);
-					unit.ad.registerViewForInteraction(unit.view, unit.ad.getAdCoverImage());
+                  unit.ad.unregisterView();
+                  unit.ad.registerViewForInteraction(unit.tracking);
                 }
 				fireEvent(__getProductShortName(), EVENT_AD_LOADED, jsonData);
         		break;

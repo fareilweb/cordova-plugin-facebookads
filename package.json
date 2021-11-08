@@ -1,7 +1,12 @@
 {
-  "name": "cordova-plugin-facebookads",
-  "version": "4.23.2",
-  "description": "Cordova Plugin for Facebook AudienceNetwork Ads",
+  "author": {
+    "name": "Luca Cilfone",
+    "email": "info@fareiweb.com"
+  },
+  "bugs": {
+    "url": "https://github.com/fareilweb/cordova-plugin-facebookads/issues"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-facebookads",
     "platforms": [
@@ -9,25 +14,22 @@
       "ios"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/floatinghotpot/cordova-plugin-facebookads.git"
-  },
-  "bugs": {
-    "url": "https://github.com/floatinghotpot/cordova-plugin-facebookads/issues"
-  },
+  "deprecated": false,
+  "description": "Cordova Plugin for Facebook AudienceNetwork Ads",
+  "homepage": "https://github.com/fareilweb/cordova-plugin-facebookads#readme",
   "keywords": [
     "cordova",
     "ecosystem:cordova",
     "ad",
     "admob",
     "facebook",
-    "audiencenetwork",
-    "rjfun"
+    "audiencenetwork"
   ],
-  "author": {
-    "name": "Raymond Xie",
-    "email": "rjfun.mobile@gmail.com"
+  "license": "MIT",
+  "name": "cordova-plugin-facebookads",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fareilweb/cordova-plugin-facebookads.git"
   },
-  "license": "MIT"
+  "version": "4.23.2"
 }
